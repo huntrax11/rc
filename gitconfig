@@ -1,0 +1,15 @@
+[user]
+  name = Hunchul Park
+  email = huntrax11@gmail.com
+[color]
+  diff = auto
+  ui = auto
+[core]
+  editor = vim
+  whitespace = trailing-space,space-before-tab,tab-in-indent
+[push]
+  default = current
+[pull]
+  default = current
+[alias]
+  graph = log --graph --pretty=format:'%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
