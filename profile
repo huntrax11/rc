@@ -44,3 +44,7 @@ function cd {
         fi
     fi
 }
+
+# Go
+export GOPATH=~/.env/go
+export PATH=$GOPATH/bin:$PATH

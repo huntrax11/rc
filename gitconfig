@@ -13,3 +13,5 @@
   default = current
 [alias]
   graph = log --graph --pretty=format:'%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[url "git@github.com:"]
+  insteadOf = https://github.com/

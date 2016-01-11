@@ -12,10 +12,12 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'stephpy/vim-yaml'
 Plugin 'lepture/vim-jinja'
+Plugin 'fatih/vim-go'
 "productivity
 Plugin 'scrooloose/syntastic'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
+Bundle 'Blackrush/vim-gocode'
 Plugin 'rhysd/committia.vim'
 call vundle#end()
 filetype plugin indent on
@@ -72,6 +74,18 @@ au! BufRead,BufNewFile *.sass setfiletype sass
 au! BufRead,BufNewFile *.haml setfiletype haml
 au! BufRead,BufNewFile *.less setfiletype less
 au! BufRead,BufNewFile *rc setfiletype conf
+
+"vim-go specific
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+au FileType go nmap <leader>r  <Plug>(go-run)
+au FileType go nmap <leader>b  <Plug>(go-build)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>n  <Plug>(go-referrers)
 
 "English spelling checker.
 setlocal spelllang=en_us

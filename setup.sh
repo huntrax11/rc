@@ -33,6 +33,9 @@ ln -sfT $CWD/vim $HOME/.vim
 vim +PluginInstall +qall
 vim +PluginClean! +qall
 
+# golang
+vim +GoInstallBinaries +qall
+
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
 
 sudo easy_install pip
