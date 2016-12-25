@@ -12,9 +12,8 @@ fi
 
 # add ~/.env to PATH
 if [ -d "$HOME/.env" ] ; then
-    export PATH="`find ~/.env -maxdepth 2 -type d -name bin | tr '\n' ':'`${PATH}"
-    export MANPATH="`find ~/.env -maxdepth 4 -type d -name man | tr '\n' ':'`${MANPATH}"
-    export INFOPATH="`find ~/.env -maxdepth 4 -type d -name info | tr '\n' ':'`${INFOPATH}"
+    export PATH="`find -L ~/.env -maxdepth 2 -type d -name bin | tr '\n' ':'`${PATH}"
+    export MANPATH="`find -L ~/.env -maxdepth 4 -type d -name man | tr '\n' ':'`${MANPATH}"
 fi
 
 # Load RVM into a shell session *as a function*

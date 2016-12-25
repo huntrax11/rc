@@ -2,25 +2,19 @@
 cd "$(dirname $0)"
 CWD="$(pwd)"
 
-function install_coreutils() {
-    VERSION="8.13"
-    mkdir -p $HOME/.env/build && cd $HOME/.env/build
-    curl -O http://ftp.gnu.org/gnu/coreutils/coreutils-${VERSION}.tar.gz
-    tar -xzf coreutils-${VERSION}.tar.gz
-    cd coreutils-${VERSION}
-    ./configure --prefix=$HOME/.env/coreutils-${VERSION}
-    make && make install
-    rm -rf $HOME/.enn/build/coreutils-*
-}
-
 if [[ $(uname -a) =~ "Darwin" ]] && ! [[ $(which ln) =~ "/.env/coreutils" ]]; then
-    install_coreutils
-    ln -sf $HOME/.profile $CWD/profile
+    curl -sSL https://get.rvm.io | bash -s stable
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew install $(cat brew_requirements)
+    brew cask install $(cat brew_cask_requirements)
+    mkdir -p $HOME/.env/coreutils
+    ln -sf /usr/local/opt/coreutils/libexec/gnubin $HOME/.env/coreutils/bin
+    ln -sf /usr/local/opt/coreutils/libexec/gnuman $HOME/.env/coreutils/man
 else
-    ln -sf $CWD/profile $HOME/.profile
+    sudo apt-get install -y git vim python-pip
     sudo ln -sf $CWD/limits.conf /etc/security/limits.conf
 fi
-#echo '[[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile' >> ~/.bash_profile
+ln -sf $CWD/profile $HOME/.profile
 source $HOME/.profile
 
 ln -sf $CWD/vimrc $HOME/.vimrc
@@ -38,5 +32,4 @@ vim +GoInstallBinaries +qall
 
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
 
-sudo easy_install pip
-sudo pip install virtualenv flake8 pygments
+sudo pip install -r pip_requirements
