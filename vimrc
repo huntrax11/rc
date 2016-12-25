@@ -12,13 +12,18 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'stephpy/vim-yaml'
 Plugin 'lepture/vim-jinja'
+Plugin 'vim-ruby/vim-ruby'
 Plugin 'fatih/vim-go'
 "productivity
 Plugin 'scrooloose/syntastic'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
+Plugin 'tpope/vim-rails'
 Bundle 'Blackrush/vim-gocode'
 Plugin 'rhysd/committia.vim'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'bling/vim-airline'
 call vundle#end()
 filetype plugin indent on
 
@@ -74,6 +79,9 @@ au! BufRead,BufNewFile *.sass setfiletype sass
 au! BufRead,BufNewFile *.haml setfiletype haml
 au! BufRead,BufNewFile *.less setfiletype less
 au! BufRead,BufNewFile *rc setfiletype conf
+
+"FZF
+nmap <leader>f :FZF<CR>
 
 "vim-go specific
 let g:go_highlight_functions = 1

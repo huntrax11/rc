@@ -17,9 +17,8 @@ if [ -d "$HOME/.env" ] ; then
     export INFOPATH="`find ~/.env -maxdepth 4 -type d -name info | tr '\n' ':'`${INFOPATH}"
 fi
 
-# RVM
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # aliases
 alias rm="rm -i"
