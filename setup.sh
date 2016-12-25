@@ -19,6 +19,7 @@ source $HOME/.profile
 
 ln -sf $CWD/vimrc $HOME/.vimrc
 ln -sf $CWD/gitconfig $HOME/.gitconfig
+ln -sf $CWD/gitignore_global $HOME/.gitignore_global
 ln -sf $CWD/pryrc $HOME/.pryrc
 ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
 
