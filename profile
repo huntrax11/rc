@@ -16,8 +16,8 @@ if [ -d "$HOME/.env" ] ; then
     export MANPATH="`find -L ~/.env -maxdepth 4 -type d -name man | tr '\n' ':'`${MANPATH}"
 fi
 
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# Bash - Vim mode
+set -o vi
 
 # aliases
 alias rm="rm -i"
@@ -31,7 +31,7 @@ function jcurl {
 
 # Auto Env
 function cd {
-    builtin cd $@
+    builtin cd "$@"
     if [ -n "$AUTO_ENV" ] && [ "$(expr `pwd` : $AUTO_ENV)" -eq "0"  ]; then
         deactivate
         unset AUTO_ENV
@@ -46,3 +46,6 @@ function cd {
 # Go
 export GOPATH=~/.env/go
 export PATH=$GOPATH/bin:$PATH
+
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
