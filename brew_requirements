@@ -1,6 +1,7 @@
 coreutils
 fzf
 git
+gnupg2
 go
 htop-osx
 macvim

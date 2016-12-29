@@ -2,13 +2,19 @@
 cd "$(dirname $0)"
 CWD="$(pwd)"
 
-gpg --keyserver hkp://keys.gnupg.net \
-    --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-curl -sSL https://get.rvm.io | bash -s stable
-if [[ $(uname -a) =~ "Darwin" ]] && ! [[ $(which ln) =~ "/.env/coreutils" ]]; then
+read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1;
+echo "";
+if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+    exit 0
+fi;
+
+if [[ $(uname -a) =~ "Darwin" ]]; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew install $(cat brew_requirements)
     brew cask install $(cat brew_cask_requirements)
+    if [ -d "$HOME/.env/coreutils" ]; then
+        rm -rf $HOME/.env/coreutils
+    fi
     mkdir -p $HOME/.env/coreutils
     ln -sf /usr/local/opt/coreutils/libexec/gnubin $HOME/.env/coreutils/bin
     ln -sf /usr/local/opt/coreutils/libexec/gnuman $HOME/.env/coreutils/man
@@ -19,20 +25,29 @@ fi
 ln -sf $CWD/profile $HOME/.profile
 source $HOME/.profile
 
-ln -sf $CWD/vimrc $HOME/.vimrc
+if ! [[ -f "$CWD/vim/bundle/Vundle.vim/README.md" ]]; then
+    git submodule update --init
+fi
+
+# git
 ln -sf $CWD/gitconfig $HOME/.gitconfig
 ln -sf $CWD/gitignore_global $HOME/.gitignore_global
-ln -sf $CWD/pryrc $HOME/.pryrc
-ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
 
-git submodule update --init
+# Vim
+ln -sf $CWD/vimrc $HOME/.vimrc
+if [ -d "$HOME/.vim" ]; then
+    rm -rf $HOME/.vim
+fi
 ln -sfT $CWD/vim $HOME/.vim
 vim +PluginInstall +qall
 vim +PluginClean! +qall
-
-# golang
 vim +GoInstallBinaries +qall
 
-curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
+# Ruby
+curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+curl -sSL https://get.rvm.io | bash -s stable
+ln -sf $CWD/pryrc $HOME/.pryrc
+ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
 
 sudo pip install -r pip_requirements
