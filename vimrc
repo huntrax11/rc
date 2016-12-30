@@ -82,6 +82,7 @@ au! BufRead,BufNewFile *rc setfiletype conf
 
 "FZF
 nmap <leader>f :FZF<CR>
+nmap <leader>/ :Lines<CR>
 
 "vim-go specific
 let g:go_highlight_functions = 1
