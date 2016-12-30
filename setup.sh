@@ -51,3 +51,11 @@ ln -sf $CWD/pryrc $HOME/.pryrc
 ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
 
 sudo pip install -r pip_requirements
+
+if [[ $(uname -a) =~ "Darwin" ]]; then
+    read -p "Initialize Vagrant VM? (y/n) " -n 1;
+    echo "";
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        vagrant up
+    fi;
+fi
