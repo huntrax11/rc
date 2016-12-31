@@ -1,37 +1,36 @@
 set nocompatible
 
-"Vundle
+"vim-plug
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/plugged')
 "theme
-Plugin 'altercation/vim-colors-solarized'
+Plug 'altercation/vim-colors-solarized'
 "syntax support
-Plugin 'plasticboy/vim-markdown'
-Plugin 'derekwyatt/vim-scala'
-Plugin 'stephpy/vim-yaml'
-Plugin 'lepture/vim-jinja'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'fatih/vim-go'
+Plug 'plasticboy/vim-markdown'
+Plug 'derekwyatt/vim-scala'
+Plug 'stephpy/vim-yaml'
+Plug 'lepture/vim-jinja'
+Plug 'vim-ruby/vim-ruby'
+Plug 'fatih/vim-go'
 "productivity
-Plugin 'scrooloose/syntastic'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'nvie/vim-flake8'
-Plugin 'tpope/vim-rails'
-Bundle 'Blackrush/vim-gocode'
-Plugin 'rhysd/committia.vim'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-Plugin 'bling/vim-airline'
-call vundle#end()
+Plug 'scrooloose/syntastic'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'zchee/deoplete-jedi'
+Plug 'nvie/vim-flake8'
+Plug 'fishbullet/deoplete-ruby'
+Plug 'tpope/vim-rails'
+Plug 'blackrush/vim-gocode', {'do': ':GoInstallBinaries'}
+Plug 'tpope/vim-fugitive'
+Plug 'rhysd/committia.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'simnalamburt/vim-mundo'
+Plug 'bling/vim-airline'
+call plug#end()
 filetype plugin indent on
 
 "Syntax highlighting.
 syntax on
-
-"Line numbers on left
-set nu
 
 "Softtab -- use spaces instead tabs.
 set expandtab
@@ -80,6 +79,13 @@ au! BufRead,BufNewFile *.haml setfiletype haml
 au! BufRead,BufNewFile *.less setfiletype less
 au! BufRead,BufNewFile *rc setfiletype conf
 
+"Mundo -- Undo tree visualization
+set undofile
+set undodir=~/.vim/undo
+
+"deoplete
+let g:deoplete#enable_at_startup = 1
+
 "FZF
 nmap <leader>f :FZF<CR>
 nmap <leader>/ :Lines<CR>
@@ -100,7 +106,7 @@ au FileType go nmap <Leader>n  <Plug>(go-referrers)
 setlocal spelllang=en_us
 
 "Keep 80 columns and dense lines.
-"set colorcolumn=81
+set colorcolumn=81
 highlight ColorColumn cterm=underline ctermbg=none
 autocmd BufWinEnter * match Error /\%>80v.\+\|\s\+$\|^\s*\n\+\%$/
 

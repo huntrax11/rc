@@ -1,0 +1,6 @@
+build-essential
+git
+neovim
+python-pip
+python3-pip
+vim

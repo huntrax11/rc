@@ -23,6 +23,7 @@ set -o vi
 alias rm="rm -i"
 alias ls="ls --color=auto"
 alias ll="ls -l"
+alias vim="nvim"
 
 # jcurl, require Pygments(sudo pip install Pygments)
 function jcurl {

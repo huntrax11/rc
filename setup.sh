@@ -19,20 +19,26 @@ if [[ $(uname -a) =~ "Darwin" ]]; then
     ln -sf /usr/local/opt/coreutils/libexec/gnubin $HOME/.env/coreutils/bin
     ln -sf /usr/local/opt/coreutils/libexec/gnuman $HOME/.env/coreutils/man
 else
-    sudo apt-get install -y git vim python-pip
+    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    sudo apt-get update
+    sudo apt-get install -y $(cat apt_requirements)
     sudo ln -sf $CWD/limits.conf /etc/security/limits.conf
 fi
 ln -sf $CWD/profile $HOME/.profile
 source $HOME/.profile
 
-if ! [[ -f "$CWD/vim/bundle/Vundle.vim/README.md" ]]; then
-    git submodule update --init
-fi
-
 # git
 ln -sf $CWD/gitconfig $HOME/.gitconfig
 ln -sf $CWD/gitignore_global $HOME/.gitignore_global
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
+
+# python
+if [[ "$(which pip2)" != "" ]]; then
+    pip2 install --upgrade -r pip_requirements
+fi
+if [[ "$(which pip3)" != "" ]]; then
+    pip3 install --upgrade -r pip_requirements
+fi
 
 # Vim
 ln -sf $CWD/vimrc $HOME/.vimrc
@@ -40,9 +46,13 @@ if [ -d "$HOME/.vim" ]; then
     rm -rf $HOME/.vim
 fi
 ln -sfT $CWD/vim $HOME/.vim
-vim +PluginInstall +qall
-vim +PluginClean! +qall
-vim +GoInstallBinaries +qall
+mkdir -p ~/.config
+if [ -d "$HOME/.config/nvim" ]; then
+    rm -rf $HOME/.config/nvim
+fi
+ln -sfT $CWD/vim $HOME/.config/nvim
+vim +PlugUpgrade +qall
+vim +PlugInstall +PlugUpdate +PlugClean! +qall
 
 # Ruby
 curl -sSL https://rvm.io/mpapis.asc | gpg --import -
@@ -50,7 +60,6 @@ curl -sSL https://get.rvm.io | bash -s stable
 ln -sf $CWD/pryrc $HOME/.pryrc
 ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
 
-sudo pip install -r pip_requirements
 
 if [[ $(uname -a) =~ "Darwin" ]]; then
     read -p "Initialize Vagrant VM? (y/n) " -n 1;

@@ -9,11 +9,13 @@ Vagrant.configure('2') do |config|
   config.vm.network 'private_network', type: 'dhcp'
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.provision 'file', source: '.', destination: '.env/rc'
+  `git ls-files`.split.each do |file|
+    config.vm.provision 'file', source: file,
+                           destination: "/home/ubuntu/.env/rc/#{file}"
+  end
   config.vm.synced_folder "#{ENV['HOME']}/Dev", '/home/ubuntu/Dev'
 
   config.vm.provision 'shell', privileged: false, inline: <<-SHELL
-    sudo apt-get install -y build-essential git vim
     yes | $HOME/.env/rc/setup.sh
     source $HOME/.profile
     rvm install ruby
