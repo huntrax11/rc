@@ -32,11 +32,16 @@ ln -sf $CWD/gitconfig $HOME/.gitconfig
 ln -sf $CWD/gitignore_global $HOME/.gitignore_global
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
 
+# tmux
+ln -sf $CWD/tmux.conf $HOME/.tmux.conf
+
 # python
 if [[ "$(which pip2)" != "" ]]; then
+    pip2 freeze | xargs pip2 uninstall -y
     pip2 install --upgrade -r pip_requirements
 fi
 if [[ "$(which pip3)" != "" ]]; then
+    pip3 freeze | xargs pip3 uninstall -y
     pip3 install --upgrade -r pip_requirements
 fi
 
@@ -57,9 +62,11 @@ vim +PlugInstall +PlugUpdate +PlugClean! +qall
 # Ruby
 curl -sSL https://rvm.io/mpapis.asc | gpg --import -
 curl -sSL https://get.rvm.io | bash -s stable
+source "$HOME/.rvm/scripts/rvm"
+rvm install ruby
+gem install $(cat gem_requirements)
 ln -sf $CWD/pryrc $HOME/.pryrc
 ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
-
 
 if [[ $(uname -a) =~ "Darwin" ]]; then
     read -p "Initialize Vagrant VM? (y/n) " -n 1;

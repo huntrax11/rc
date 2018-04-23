@@ -18,7 +18,5 @@ Vagrant.configure('2') do |config|
   config.vm.provision 'shell', privileged: false, inline: <<-SHELL
     yes | $HOME/.env/rc/setup.sh
     source $HOME/.profile
-    rvm install ruby
-    gem install bundler
   SHELL
 end
