@@ -19,7 +19,7 @@ if [[ $(uname -a) =~ "Darwin" ]]; then
     ln -sf /usr/local/opt/coreutils/libexec/gnubin $HOME/.env/coreutils/bin
     ln -sf /usr/local/opt/coreutils/libexec/gnuman $HOME/.env/coreutils/man
 else
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    sudo add-apt-repository -y ppa:neovim-ppa/stable
     sudo apt-get update
     sudo apt-get install -y $(cat apt_requirements)
     sudo ln -sf $CWD/limits.conf /etc/security/limits.conf

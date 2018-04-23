@@ -7,13 +7,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'altercation/vim-colors-solarized'
 "syntax support
 Plug 'plasticboy/vim-markdown'
+Plug 'othree/html5.vim'
 Plug 'derekwyatt/vim-scala'
 Plug 'stephpy/vim-yaml'
 Plug 'lepture/vim-jinja'
 Plug 'vim-ruby/vim-ruby'
 Plug 'fatih/vim-go'
 "productivity
-Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'zchee/deoplete-jedi'
 Plug 'nvie/vim-flake8'
@@ -25,7 +26,7 @@ Plug 'rhysd/committia.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'simnalamburt/vim-mundo'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 filetype plugin indent on
 
@@ -40,6 +41,9 @@ set smartindent
 set cindent
 highlight HardTab cterm=underline
 autocmd BufWinEnter * 2 match HardTab /\t\+/
+
+"clipboard
+set clipboard+=unnamedplus
 
 "Use mouse.
 set mouse=a
@@ -71,6 +75,7 @@ au FileType sass       setl ts=2 sw=2 sts=2
 au FileType less       setl ts=2 sw=2 sts=2
 au Filetype rst        setl ts=3 sw=3 sts=3
 au FileType make       setl ts=4 sw=4 sts=4 noet
+au FileType gitcommit setl spell
 
 "Some additional syntax highlighters.
 au! BufRead,BufNewFile *.wsgi setfiletype python
@@ -85,6 +90,7 @@ set undodir=~/.vim/undo
 
 "deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#jedi#show_docstring = 1
 
 "FZF
 nmap <leader>f :FZF<CR>
@@ -109,6 +115,19 @@ setlocal spelllang=en_us
 set colorcolumn=81
 highlight ColorColumn cterm=underline ctermbg=none
 autocmd BufWinEnter * match Error /\%>80v.\+\|\s\+$\|^\s*\n\+\%$/
+
+"truecolor
+if has('termguicolors')
+  set termguicolors
+endif
+
+"neovim-specific configurations
+if has("nvim")
+  colorscheme solarized
+  set background=dark
+  set guioptions=egmrLt
+  set linespace=1
+endif
 
 "gVim-specific configurations (including MacVim).
 if has("gui_running")
