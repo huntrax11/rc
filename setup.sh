@@ -25,16 +25,24 @@ else
     sudo apt-get install -y $(cat apt_requirements)
     sudo ln -sf $CWD/limits.conf /etc/security/limits.conf
 fi
+
+# shell
 ln -sf $CWD/profile $HOME/.profile
+[ -f $CWD/profile.local ] && ln -sf $CWD/profile.local $HOME/.profile.local
+ln -sf $CWD/curlrc $HOME/.curlrc
 source $HOME/.profile
 
 # git
 ln -sf $CWD/gitconfig $HOME/.gitconfig
+[ -f $CWD/gitconfig.local ] && ln -sf $CWD/gitconfig.local $HOME/.gitconfig.local
 ln -sf $CWD/gitignore_global $HOME/.gitignore_global
-curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
+curl -s https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
 
 # tmux
 ln -sf $CWD/tmux.conf $HOME/.tmux.conf
+
+# Terraform
+ln -sf $CWD/terraformrc $HOME/.terraformrc
 
 # python
 if [[ "$(which pip3)" != "" ]]; then
@@ -64,11 +72,3 @@ rvm install ruby
 gem install $(cat gem_requirements)
 ln -sf $CWD/pryrc $HOME/.pryrc
 ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
-
-if [[ $(uname -a) =~ "Darwin" ]]; then
-    read -p "Initialize Vagrant VM? (y/n) " -n 1;
-    echo "";
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        vagrant up
-    fi;
-fi

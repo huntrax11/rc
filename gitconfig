@@ -1,16 +1,39 @@
 [user]
-  name = Hunchul Park
-  email = huntrax11@gmail.com
-[color]
-  diff = auto
-  ui = auto
+	name = Hunchul Park(Robert)
+	email = huntrax11@gmail.com
 [core]
-  editor = vim
-  whitespace = trailing-space,space-before-tab,tab-in-indent
-  excludesfile = ~/.gitignore_global
+	editor = nvim
+	whitespace = trailing-space,space-before-tab,tab-in-indent
+	excludesfile = ~/.gitignore_global
+[init]
+	defaultBranch = main
+[color]
+	diff = auto
+	ui = auto
 [push]
-  default = current
+	default = current
 [pull]
-  default = current
+	default = current
 [alias]
-  graph = log --graph --pretty=format:'%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	graph = log --graph --pretty=format:'%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+
+# Per-directory identity overrides (example):
+#   [includeIf "gitdir:~/Dev/work-org/"]
+#     path = ~/Dev/work-org/.gitconfig
+
+# Machine-specific overrides (not tracked in git)
+[include]
+	path = ~/.gitconfig.local
