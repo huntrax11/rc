@@ -9,15 +9,16 @@ if ! [[ $REPLY =~ ^[Yy]$ ]]; then
 fi;
 
 if [[ $(uname -a) =~ "Darwin" ]]; then
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install $(cat brew_requirements)
-    brew cask install $(cat brew_cask_requirements)
-    if [ -d "$HOME/.env/coreutils" ]; then
-        rm -rf $HOME/.env/coreutils
-    fi
-    mkdir -p $HOME/.env/coreutils
-    ln -sf /usr/local/opt/coreutils/libexec/gnubin $HOME/.env/coreutils/bin
-    ln -sf /usr/local/opt/coreutils/libexec/gnuman $HOME/.env/coreutils/man
+    brew install --cask $(cat brew_cask_requirements)
+    for tool in coreutils findutils gawk gnu-sed gnu-tar; do
+        if [ -d "/opt/homebrew/opt/$tool/libexec" ]; then
+            mkdir -p $HOME/.local/opt/$tool
+            ln -sf /opt/homebrew/opt/$tool/libexec/gnubin $HOME/.local/opt/$tool/bin
+            ln -sf /opt/homebrew/opt/$tool/libexec/gnuman $HOME/.local/opt/$tool/man
+        fi
+    done
 else
     sudo add-apt-repository -y ppa:neovim-ppa/stable
     sudo apt-get update
@@ -36,10 +37,6 @@ curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-com
 ln -sf $CWD/tmux.conf $HOME/.tmux.conf
 
 # python
-if [[ "$(which pip2)" != "" ]]; then
-    pip2 freeze | xargs pip2 uninstall -y
-    pip2 install --upgrade -r pip_requirements
-fi
 if [[ "$(which pip3)" != "" ]]; then
     pip3 freeze | xargs pip3 uninstall -y
     pip3 install --upgrade -r pip_requirements
