@@ -50,6 +50,26 @@ function cd {
     fi
 }
 
+# uv wrapper: auto-install editor dependencies after uv sync
+function uv {
+    command uv "$@"
+    if [[ "$1" == "sync" ]]; then
+        RC_DIR="$(dirname "$(readlink -f "$HOME/.profile")")"
+        echo "Installing editor dependencies from $RC_DIR/pip_requirements..."
+        command uv pip install -r "$RC_DIR/pip_requirements"
+    fi
+}
+
+# poetry wrapper: auto-install editor dependencies after poetry install
+function poetry {
+    command poetry "$@"
+    if [[ "$1" == "install" || "$1" == "update" ]]; then
+        RC_DIR="$(dirname "$(readlink -f "$HOME/.profile")")"
+        echo "Installing editor dependencies from $RC_DIR/pip_requirements..."
+        command pip install -r "$RC_DIR/pip_requirements"
+    fi
+}
+
 # Go
 export GOPATH=~/.local/opt/go
 export PATH=$GOPATH/bin:$PATH

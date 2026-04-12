@@ -1,0 +1,29 @@
+{
+  "languageserver": {
+    "terraform": {
+      "command": "terraform-lsp",
+      "filetypes": [
+        "terraform"
+      ],
+      "initializationOptions": {}
+    },
+    "python": {
+      "command": "jedi-language-server",
+      "filetypes": ["python"]
+    }
+  },
+  "yaml.schemas": {
+    "Kubernetes": [
+      "/k8s*.yaml",
+      "/k8s*.yml",
+      "/kubernetes*.yaml",
+      "/kubernetes*.yml",
+      "/kubernetes/**/*.yaml",
+      "/kubernetes/**/*.yml"
+    ],
+    "https://raw.githubusercontent.com/docker/cli/refs/heads/master/cli/compose/schema/data/config_schema_v3.13.json": ["/docker-compose.yml"],
+    "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/kustomization.json": ["/kustomization.yaml"],
+    "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/cloudbuild.json": ["/cloudbuild.yaml"],
+  },
+  "svelte.enable-ts-plugin": true
+}

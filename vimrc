@@ -4,29 +4,34 @@ set nocompatible
 filetype off
 call plug#begin('~/.vim/plugged')
 "theme
-Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
+Plug 'rafi/awesome-vim-colorschemes'
 "syntax support
 Plug 'plasticboy/vim-markdown'
 Plug 'othree/html5.vim'
-Plug 'derekwyatt/vim-scala'
-Plug 'stephpy/vim-yaml'
+"Plug 'derekwyatt/vim-scala'
+"Plug 'stephpy/vim-yaml'
 Plug 'lepture/vim-jinja'
-Plug 'vim-ruby/vim-ruby'
-Plug 'fatih/vim-go'
+"Plug 'vim-ruby/vim-ruby'
+"Plug 'fatih/vim-go'
+
 "productivity
 Plug 'w0rp/ale'
-Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-Plug 'zchee/deoplete-jedi'
-Plug 'nvie/vim-flake8'
-Plug 'fishbullet/deoplete-ruby'
-Plug 'tpope/vim-rails'
-Plug 'blackrush/vim-gocode', {'do': ':GoInstallBinaries'}
+"Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+"Plug 'zchee/deoplete-jedi'
+"Plug 'nvie/vim-flake8'
+"Plug 'fishbullet/deoplete-ruby'
+"Plug 'tpope/vim-rails'
+"Plug 'blackrush/vim-gocode', {'do': ':GoInstallBinaries'}
 Plug 'tpope/vim-fugitive'
 Plug 'rhysd/committia.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'simnalamburt/vim-mundo'
 Plug 'vim-airline/vim-airline'
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'github/copilot.vim'
 call plug#end()
 filetype plugin indent on
 
@@ -76,6 +81,7 @@ au FileType less       setl ts=2 sw=2 sts=2
 au Filetype rst        setl ts=3 sw=3 sts=3
 au FileType make       setl ts=4 sw=4 sts=4 noet
 au FileType gitcommit setl spell
+au FileType tsv        setl noet
 
 "Some additional syntax highlighters.
 au! BufRead,BufNewFile *.wsgi setfiletype python
@@ -88,33 +94,42 @@ au! BufRead,BufNewFile *rc setfiletype conf
 set undofile
 set undodir=~/.vim/undo
 
-"deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#jedi#show_docstring = 1
+""deoplete
+"let g:deoplete#enable_at_startup = 1
+"let g:deoplete#sources#jedi#show_docstring = 1
 
 "FZF
 nmap <leader>f :FZF<CR>
 nmap <leader>/ :Lines<CR>
 
-"vim-go specific
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-au FileType go nmap <leader>r  <Plug>(go-run)
-au FileType go nmap <leader>b  <Plug>(go-build)
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <Leader>n  <Plug>(go-referrers)
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+""vim-go specific
+"let g:go_highlight_functions = 1
+"let g:go_highlight_methods = 1
+"let g:go_highlight_structs = 1
+"let g:go_highlight_operators = 1
+"let g:go_highlight_build_constraints = 1
+"au FileType go nmap <leader>r  <Plug>(go-run)
+"au FileType go nmap <leader>b  <Plug>(go-build)
+"au FileType go nmap <Leader>ds <Plug>(go-def-split)
+"au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+"au FileType go nmap <Leader>n  <Plug>(go-referrers)
+
+"copilot specific
+let g:copilot_no_telemetry = 1
 
 "English spelling checker.
 setlocal spelllang=en_us
 
-"Keep 80 columns and dense lines.
-set colorcolumn=81
+"Keep 120 columns and dense lines.
+set colorcolumn=121
 highlight ColorColumn cterm=underline ctermbg=none
-autocmd BufWinEnter * match Error /\%>80v.\+\|\s\+$\|^\s*\n\+\%$/
+autocmd BufWinEnter * match Error /\%>120v.\+\|\s\+$\|^\s*\n\+\%$/
 
 "truecolor
 if has('termguicolors')
@@ -123,15 +138,15 @@ endif
 
 "neovim-specific configurations
 if has("nvim")
-  colorscheme solarized
+  colorscheme solarized8_high
   set background=dark
-  set guioptions=egmrLt
+  "set guioptions=egmrLt
   set linespace=1
 endif
 
 "gVim-specific configurations (including MacVim).
 if has("gui_running")
-  colorscheme solarized
+  colorscheme solarized8_high
   set background=dark
   set guioptions=egmrLt
   set linespace=1

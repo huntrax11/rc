@@ -45,24 +45,22 @@ ln -sf $CWD/tmux.conf $HOME/.tmux.conf
 ln -sf $CWD/terraformrc $HOME/.terraformrc
 
 # python
-if [[ "$(which pip3)" != "" ]]; then
-    pip3 freeze | xargs pip3 uninstall -y
-    pip3 install --upgrade -r pip_requirements
-fi
+xargs -I {} uv tool install {} < uv_tool_requirements
+uv pip install --system -r pip_requirements
 
-# Vim
+# Vim / Neovim
 ln -sf $CWD/vimrc $HOME/.vimrc
-if [ -d "$HOME/.vim" ]; then
+mkdir -p $HOME/.config
+if [ -L "$HOME/.vim" ] || [ -d "$HOME/.vim" ]; then
     rm -rf $HOME/.vim
 fi
-ln -sfT $CWD/vim $HOME/.vim
-mkdir -p ~/.config
-if [ -d "$HOME/.config/nvim" ]; then
+ln -sf $CWD/vim $HOME/.vim
+if [ -L "$HOME/.config/nvim" ] || [ -d "$HOME/.config/nvim" ]; then
     rm -rf $HOME/.config/nvim
 fi
-ln -sfT $CWD/vim $HOME/.config/nvim
-vim +PlugUpgrade +qall
-vim +PlugInstall +PlugUpdate +PlugClean! +qall
+ln -sf $CWD/vim $HOME/.config/nvim
+nvim +PlugUpgrade +qall
+nvim +PlugInstall +PlugUpdate +PlugClean! +qall
 
 # Ruby
 curl -sSL https://rvm.io/mpapis.asc | gpg --import -
@@ -72,3 +70,9 @@ rvm install ruby
 gem install $(cat gem_requirements)
 ln -sf $CWD/pryrc $HOME/.pryrc
 ln -sf $CWD/rubocop.yml $HOME/.rubocop.yml
+
+# Claude Code
+mkdir -p $HOME/.claude/hooks
+ln -sf $CWD/claude/CLAUDE.md $HOME/.claude/CLAUDE.md
+ln -sf $CWD/claude/settings.json $HOME/.claude/settings.json
+ln -sf $CWD/claude/hooks/block-terraform-destroy.sh $HOME/.claude/hooks/block-terraform-destroy.sh

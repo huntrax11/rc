@@ -1,4 +1,2 @@
-virtualenv
-flake8
-pygments
+jedi-language-server
 neovim
