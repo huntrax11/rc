@@ -40,13 +40,11 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 - Before implementing any credential-based integration, first evaluate whether workload identity is available for the target platform.
 - Only use static API keys when workload identity is genuinely not supported; document the reason when doing so.
 
-## Istio — External API Access
+## Kubernetes & Istio
 
-- When integrating with any external HTTPS API, use **TLS origination** so the sidecar handles TLS instead of the app.
-  - App sends plain HTTP → sidecar upgrades to HTTPS toward the external host.
-  - This keeps egress traffic visible to Istio (metrics, tracing, access logs). If the app opens TLS directly, the sidecar sees an opaque stream and observability is lost.
-  - Requires a `ServiceEntry` (port 80, `HTTP`) + `DestinationRule` (`trafficPolicy.tls.mode: SIMPLE`).
-- Refer to the Istio config reference: `https://istio.io/v1.27/docs/reference/config/`
+- Use Istio TLS origination for external HTTPS APIs — sidecar handles TLS and preserves egress observability.
+- In repos with kustomize overlays, always `apply -k overlay/`, never `apply -f` a single base file.
+- Full guide: `~/.claude/stack/k8s.md`.
 
 ## Model Selection
 
@@ -65,6 +63,23 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 - **Never fabricate or guess** IDL files (`.proto`, `.thrift`, etc.).
 - Binary formats serialize by **field number**, not field name. A wrong number silently corrupts data at the wire level with no compile-time or runtime error.
 - When adding a cross-repo RPC integration, **ask the user** where the canonical IDL lives and how they want to consume it (direct copy, git submodule, published package, etc.). Do not assume an approach.
+
+## Python
+
+- When typing a Pydantic field, prefer the matching native type (`HttpUrl`, `EmailStr`, etc.) over generic `str` / `int`. Validation, intent, and OpenAPI schemas come free.
+- Alembic migrations must not import application code. A migration is a historical record and has to keep producing the same DDL after the app moves on.
+- Full guide: `~/.claude/lang/python.md`.
+
+## MySQL
+
+- Use `DATETIME(6)`, pick one clock source (`NOW(6)` or `UTC_TIMESTAMP(6)`) consistently, and handle naive↔aware conversion in a SQLAlchemy TypeDecorator.
+- Full guide: `~/.claude/stack/mysql.md`.
+
+## Redis
+
+- Prefer Lua scripts (`register_script`) over distributed locks for atomic read-then-write. Lua CAS replaces locks with no stuck-lock failure mode.
+- Core flows must work without Redis — use it for best-effort operations (rate limiting, replay detection, caching) and fall through on failure.
+- Full guide: `~/.claude/stack/redis.md`.
 
 ## Shell Script Compatibility
 
@@ -88,6 +103,11 @@ When presenting or choosing between design options, lead with the explicit, well
 - **Respect a field's semantic purpose.** Don't overload human-facing fields (e.g. `AlarmDescription`, commit messages, log messages) to carry machine-readable metadata.
 - **Clean module boundaries beat accumulated branches.** A generic module acquiring specialized branches (e.g. a notifier Lambda gaining k8s-specific enrichment) is worse than splitting into two well-scoped modules, even at the cost of extra infra. If the generic module must host a specialized branch, make the contract explicit (e.g. typed tags) and name the dispatch registry so future additions are obvious.
 - **Small network or infra cost is acceptable** to preserve explicitness. An extra API call (e.g. `ListTagsForResource`) or a second Lambda is cheaper than ambiguous contracts that future readers have to reverse-engineer.
+
+## Branching
+
+- Git-flow variant: `main` ← `develop` ← `feature/*`, with `develop` optional for smaller repos. `deploy/YYMM` branches for staged rollouts.
+- Full guide: `~/.claude/stack/git.md`.
 
 ## Commits
 
