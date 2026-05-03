@@ -76,5 +76,6 @@ mkdir -p $HOME/.claude/hooks
 ln -sf $CWD/claude/CLAUDE.md $HOME/.claude/CLAUDE.md
 ln -sf $CWD/claude/settings.json $HOME/.claude/settings.json
 ln -sf $CWD/claude/hooks/block-terraform-destroy.sh $HOME/.claude/hooks/block-terraform-destroy.sh
+ln -sf $CWD/claude/statusline-command.sh $HOME/.claude/statusline-command.sh
 ln -sfn $CWD/claude/lang $HOME/.claude/lang
 ln -sfn $CWD/claude/stack $HOME/.claude/stack
