@@ -48,8 +48,8 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 
 ## Model Selection
 
-- Use **Opus** (`/model opus`) for planning, architecture design, and complex decision-making tasks.
-- Use the **default model** for all other work (implementation, code edits, debugging, etc.).
+- Use the **most capable available model** for planning, architecture design, and complex decision-making tasks.
+- Use the **default model** for all other work — implementation, code edits, debugging, etc.
 
 ## Service-to-service comms — prefer REST
 

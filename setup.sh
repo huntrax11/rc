@@ -79,3 +79,8 @@ ln -sf $CWD/claude/hooks/block-terraform-destroy.sh $HOME/.claude/hooks/block-te
 ln -sf $CWD/claude/statusline-command.sh $HOME/.claude/statusline-command.sh
 ln -sfn $CWD/claude/lang $HOME/.claude/lang
 ln -sfn $CWD/claude/stack $HOME/.claude/stack
+
+# Codex CLI / Gemini CLI
+mkdir -p $HOME/.codex $HOME/.gemini
+ln -sf $CWD/agents/AGENTS.md $HOME/.codex/AGENTS.md
+ln -sf $CWD/agents/AGENTS.md $HOME/.gemini/GEMINI.md
