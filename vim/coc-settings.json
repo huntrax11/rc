@@ -1,9 +1,13 @@
 {
   "languageserver": {
     "terraform": {
-      "command": "terraform-lsp",
+      "command": "terraform-ls",
+      "args": [
+        "serve"
+      ],
       "filetypes": [
-        "terraform"
+        "terraform",
+        "terraform-vars"
       ],
       "initializationOptions": {}
     },
@@ -18,13 +22,17 @@
     "Kubernetes": [
       "/k8s*.yaml",
       "/k8s*.yml",
+      "/k8s/**/*.yaml",
+      "/k8s/**/*.yml",
+      "!/k8s/**/kustomization.yml",
       "/kubernetes*.yaml",
       "/kubernetes*.yml",
       "/kubernetes/**/*.yaml",
-      "/kubernetes/**/*.yml"
+      "/kubernetes/**/*.yml",
+      "!/kubernetes/**/kustomization.yml"
     ],
     "https://raw.githubusercontent.com/docker/cli/refs/heads/master/cli/compose/schema/data/config_schema_v3.13.json": [
-      "/docker-compose.yml"
+      "/docker-compose.y*ml"
     ],
     "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/kustomization.json": [
       "/kustomization.yaml"
