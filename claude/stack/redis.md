@@ -1,5 +1,18 @@
 # Redis
 
+## Valkey Compatibility (Common-Subset Rule)
+
+- Managed "Redis" offerings are often Valkey. Write against the common subset of
+  upstream Redis and Valkey. The set of single-lineage commands and options changes
+  with every release cycle — verify in both lineages' docs at time of use instead
+  of relying on a remembered divergence list.
+- Keep CAS patterns as Lua scripts: identical behavior on both lineages, and no
+  dependency on either lineage's native conditional-write commands.
+- Hash field TTL (`HEXPIRE` family; Redis ≥ 7.4, Valkey ≥ 9.1) has identical
+  semantics in both lineages: overwriting or deleting a field (`HSET`, `HDEL`)
+  clears its TTL; in-place modification (`HINCRBY`) preserves it. A key-level TTL
+  overrides field TTLs — the whole key still dies when it expires.
+
 ## Lua Scripts — Prefer `register_script` over raw `EVAL`
 
 - `register_script` returns a callable that transparently caches the script SHA and falls back to `EVAL` on `NOSCRIPT`. One SHA lookup per call instead of shipping the full Lua source every time.

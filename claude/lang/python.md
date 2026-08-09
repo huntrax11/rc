@@ -1,5 +1,9 @@
 # Python
 
+## PEP 758 — except without parentheses (3.14+)
+
+`except (A, B):` and `except A, B:` are equivalent. ruff format removes the parentheses.
+
 ## Pydantic — Prefer Native Types Over Generic Primitives
 
 When a Pydantic model field has a known semantic shape, use the matching Pydantic type instead of `str` / `int`. Validation comes free, type intent is explicit, and OpenAPI schemas auto-derive correct formats. Applies to settings classes (`BaseSettings`), domain models, and API request/response schemas alike.

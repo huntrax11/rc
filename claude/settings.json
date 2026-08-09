@@ -3,23 +3,9 @@
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "MAX_THINKING_TOKENS": "128000"
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "$HOME/.claude/hooks/block-terraform-destroy.sh",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ]
-  },
-  "model": "claude-opus-4-6[1m]",
   "permissions": {
     "deny": [
-      "Read(**/.env*)",
+      "Read(**/.env{,.local,.dev,.prod})",
       "Read(**/.dev.vars*)",
       "Read(**/*.pem)",
       "Read(**/*.key)",
@@ -31,14 +17,45 @@
       "Read(**/config/credentials.json)",
       "Read(**/.npmrc)",
       "Read(**/.pypirc)",
-      "Write(**/.env*)",
+      "Write(**/.env{,.local,.dev,.prod})",
       "Write(**/secrets/**)",
-      "Write(**/.ssh/**)"
+      "Write(**/.ssh/**)",
+      "Bash(*git*push*--force*)",
+      "Bash(*git*push*-f*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "claude-opus-5[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/block-terraform-destroy.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sed -n '/^## Commits$/,/^## [^#]/p' ~/.claude/CLAUDE.md | sed '$d' | jq -Rs '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":(\"COMMIT RULES (from CLAUDE.md):\\n\\n\" + .)}}'",
+            "if": "Bash(*git*commit*)",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   },
-  "skipAutoPermissionPrompt": true,
   "statusLine": {
-    "command": "bash $HOME/.claude/statusline-command.sh",
-    "type": "command"
-  }
+    "type": "command",
+    "command": "bash $HOME/.claude/statusline-command.sh"
+  },
+  "effortLevel": "xhigh",
+  "tui": "default",
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true
 }

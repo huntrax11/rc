@@ -4,6 +4,7 @@
 
 - **Conversational replies to the user: Korean.** All written artifacts (code, comments, docs, commit messages, PR descriptions, file content): English.
 - Write English in plain, clear language that is easy to understand for non-native speakers. Prefer short sentences, common words, and direct phrasing over complex or idiomatic expressions.
+- **No unexplained borrowed jargon in Korean replies.** Software terms borrowed metaphorically from another field (e.g. "seam", taken from sewing by *Working Effectively with Legacy Code*; "dance" — a multi-step workaround procedure, say "다단계 우회 절차" or "이사 절차"; "blip" — a brief interruption of seconds to a minute, say "순단") need a one-line gloss on first use, or should be replaced with plain wording. Standard domain vocabulary is fine as-is: idempotent, gap lock, savepoint. Test: would the word appear, unexplained, in the official docs for the technology being discussed? If not, explain it or drop it.
 
 ## Documentation
 
@@ -23,6 +24,8 @@ When a stack/language guide grows beyond a few lines, split it into `~/.claude/l
 4. Mention the update briefly in the response so the user can confirm placement.
 
 This applies to both **negative feedback** (corrections, "don't do X") and **positive validation** ("yes, that approach is right — keep doing it"). Both reshape future behavior and should be captured.
+
+**Before writing a lesson to the memory directory or a CLAUDE.md, state the exact lesson you intend to record and get the user's review first — do not autonomously decide the wording and persist it.** Proactive capture means noticing something is worth saving and proposing it; it does not mean writing it unilaterally. Propose the lesson, let the user correct, narrow, or reject it, then write only what was reviewed.
 
 Classification hints:
 - Mentions a specific repo / file / business concept → **project**.
@@ -64,6 +67,21 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 - Binary formats serialize by **field number**, not field name. A wrong number silently corrupts data at the wire level with no compile-time or runtime error.
 - When adding a cross-repo RPC integration, **ask the user** where the canonical IDL lives and how they want to consume it (direct copy, git submodule, published package, etc.). Do not assume an approach.
 
+## CSP Alternatives to OSS (forks & wire-compatible reimplementations)
+
+- **Forks** (Redis → Valkey, Elasticsearch → OpenSearch): shared codebase up to
+  the license-change point; divergence is additive. Use only features that exist
+  and behave the same in both lineages. When a fork-only feature duplicates an
+  established portable pattern (e.g. a native CAS-delete command replacing the
+  standard Lua script), keep the portable pattern.
+- **Wire-compatible reimplementations** (MongoDB → Amazon DocumentDB): no shared
+  code — the vendor implements a subset of the upstream API, and same-named
+  features can behave differently. The vendor's documented compatibility /
+  functional-differences page is the contract; verify against it and test against
+  the managed engine itself, not the upstream image local dev runs.
+- In both cases compatibility is per-option and per-semantics, not
+  per-command-name. Verify in both lineages' docs before relying on a feature.
+
 ## Python
 
 - When typing a Pydantic field, prefer the matching native type (`HttpUrl`, `EmailStr`, etc.) over generic `str` / `int`. Validation, intent, and OpenAPI schemas come free.
@@ -93,7 +111,9 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 ## Code Style Preferences
 
 - Prefer **minimal diffs** — change only what is necessary.
+- **Code comments follow the same Drop/Keep discipline as commit messages.** Keep only the non-obvious *why* and load-bearing dependencies/safety-nets a future maintainer can't reconstruct from the code. Drop what the code plainly shows (standard-API semantics, values visible on the line) and don't restate the same cross-file rationale at every site it touches — explain it once, keep the others to a terse pointer.
 - Prefer **good defaults** over excessive parameterization. Do not expose configuration for things that have an obvious right answer.
+- When reviewing configurable timeouts or limits, do not suggest arbitrary extreme lower bounds just to reject zero/negative values. Pick a semantically meaningful safe range for the system, and explain the operational reason.
 
 ## Design — Explicit over Implicit
 
@@ -108,6 +128,7 @@ When presenting or choosing between design options, lead with the explicit, well
 
 - Git-flow variant: `main` ← `develop` ← `feature/*`, with `develop` optional for smaller repos. `deploy/YYMM` branches for staged rollouts.
 - Full guide: `~/.claude/stack/git.md`.
+- **Verify after every state-changing git operation.** After `reset`, `merge`, `rebase`, `cherry-pick`, or `squash`, run `git diff --stat` (or `git diff <base>..HEAD --stat`) and confirm only intended files are affected before proceeding. Before `git stash`, run `git status` to know what you are stashing. Blind git operations compound — one unchecked step can silently corrupt the next.
 
 ## Commits
 
@@ -157,6 +178,7 @@ Prefer terse. Every sentence should carry a decision-relevant fact. Body should 
 - **DB migration commands require explicit approval, even in auto mode.** Never run `alembic upgrade/downgrade`, `drizzle-kit migrate`, or any equivalent that mutates a database schema without explicit user permission. Generating migration files (`alembic revision --autogenerate`, `drizzle-kit generate`) is fine; applying them is not. If a workflow step (e.g. autogenerate) fails because the DB is not up to date, report the blocker and let the user decide when to run the migration.
 - **Never assume any environment's database is empty.** Dev, staging, and production databases all may contain data. When a migration changes column types, encryption schemes, or serialization formats, always include data conversion logic — don't skip it based on assumptions about the environment. If unsure whether data exists, ask.
 - **Cluster-modifying commands require explicit approval, even in auto mode.** Editing a K8s manifest (or any infra-as-code file) does NOT imply permission to apply it. Pause and confirm before `kubectl apply/delete/edit/patch/rollout restart`, `terraform apply`, `helm install/upgrade`, or any command that mutates a shared cluster/environment. Auto mode does not lift this bar — shared infra outranks autonomy.
+- **Shared-environment experiments require prior approval — announcing is not approval.** Any diagnostic/repro experiment that (a) mutates shared-environment state — including app-level test data or synthetic accounts, (b) mints credentials using server-side key material (bypassing the normal auth flow), or (c) executes non-read-only code inside shared pods/hosts, must get explicit user approval BEFORE running. Read-only inspection is the ceiling for unilateral action. "A developer would routinely do this" is self-justification, not authorization. On approval: use obviously-labeled artifact names and delete the artifacts in the same session via the proper cleanup path.
 - **Evaluate automated LLM code review comments critically, not reflexively.** LLM reviewer bots have structural biases: they are prompted to find improvements (quota bias), they are stateless across rounds (may contradict earlier accepted decisions), and they are non-deterministic (same code, different runs, different nits). Each round, easy wins get consumed and the bot digs into increasingly marginal suggestions. For every suggestion, ask: (1) does this address a real problem or a hypothetical one, (2) does the value outweigh the cost of another review round and merge delay, (3) does it contradict an earlier accepted decision (cardinality / scope / design choice), (4) is this the round where we should stop iterating. Default to pushing back on marginal suggestions and recommending merge when remaining comments are nits; do not treat "sounds plausible" as "should apply".
 
 ## Documentation & Reporting
