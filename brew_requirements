@@ -38,9 +38,9 @@ nvm
 p7zip
 pgcli
 protobuf
-terraform
+hashicorp/tap/terraform
 terraform-docs
-terraform-lsp
+hashicorp/tap/terraform-ls
 tmux
 tree
 uv

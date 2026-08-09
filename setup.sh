@@ -10,6 +10,7 @@ fi;
 
 if [[ $(uname -a) =~ "Darwin" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew trust --tap hashicorp/tap
     brew install $(cat brew_requirements)
     brew install --cask $(cat brew_cask_requirements)
     for tool in coreutils findutils gawk gnu-sed gnu-tar; do

@@ -8,8 +8,6 @@ claude-code
 codex-app
 cursor
 dbeaver-community
-docker
-docker-desktop
 dropbox
 firefox
 flutter
@@ -22,6 +20,8 @@ insomnia
 iterm2
 leapp
 ngrok
+orbstack
+redis-insight
 slack
 telegram
 vlc
