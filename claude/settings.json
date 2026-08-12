@@ -17,9 +17,9 @@
       "Read(**/config/credentials.json)",
       "Read(**/.npmrc)",
       "Read(**/.pypirc)",
-      "Write(**/.env{,.local,.dev,.prod})",
-      "Write(**/secrets/**)",
-      "Write(**/.ssh/**)",
+      "Edit(**/.env{,.local,.dev,.prod})",
+      "Edit(**/secrets/**)",
+      "Edit(**/.ssh/**)",
       "Bash(*git*push*--force*)",
       "Bash(*git*push*-f*)"
     ],
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/block-terraform-destroy.sh"
+            "command": "~/.claude/hooks/block-terraform-destroy.sh"
           }
         ]
       },
@@ -52,7 +52,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash $HOME/.claude/statusline-command.sh"
+    "command": "~/.claude/statusline-command.sh"
   },
   "effortLevel": "xhigh",
   "tui": "default",
