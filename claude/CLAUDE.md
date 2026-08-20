@@ -43,6 +43,13 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 - Before implementing any credential-based integration, first evaluate whether workload identity is available for the target platform.
 - Only use static API keys when workload identity is genuinely not supported; document the reason when doing so.
 
+## AWS
+
+- Presigned URL lifetimes are capped by the signing credential's remaining life
+  in addition to the SigV4 7-day limit.
+- One AWS session per process, shared by every service client.
+- Full guide: `~/.claude/stack/aws.md`.
+
 ## Kubernetes & Istio
 
 - Use Istio TLS origination for external HTTPS APIs — sidecar handles TLS and preserves egress observability.
