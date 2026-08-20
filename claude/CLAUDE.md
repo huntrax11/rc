@@ -16,6 +16,15 @@ Three CLAUDE.md scopes exist. Keep each up to date whenever a relevant conventio
 
 When a stack/language guide grows beyond a few lines, split it into `~/.claude/lang/<language>.md` or `~/.claude/stack/<tool>.md` and leave a 1–3 line pointer (with the most critical inline rules) in the main file.
 
+**What earns a place in one of these files.** Calibrate to a previous-generation mid-tier model, not to the strongest model available — whichever model is running is the one reading this. Write only two kinds of thing:
+
+- Facts that model would not have known, and would have gotten wrong unprompted.
+- Behavior it knows about but does not do by default unless told.
+
+Leave out anything it can produce correctly on demand — such content is padding that costs context every session.
+
+For material that is important but shifts between versions — compatibility tables, feature-support matrices, limits, defaults — write the instruction to check the vendor's documentation for the version in use, with a link. Do not transcribe the values. A stale number is worse than no number because it still reads as authoritative. Self-check: a guide that tells the reader to go check the table must not also copy that table into itself.
+
 **When the user gives feedback, corrects a mistake, or expresses a new preference, decide proactively (without waiting to be asked):**
 
 1. Classify the lesson into one of the three scopes above.
