@@ -98,6 +98,7 @@ When unsure between two scopes, prefer the narrower one — easier to promote la
 ## MySQL
 
 - Use `DATETIME(6)`, pick one clock source (`NOW(6)` or `UTC_TIMESTAMP(6)`) consistently, and handle naive↔aware conversion in a SQLAlchemy TypeDecorator.
+- Always specify `ALGORITHM` on `ALTER TABLE` — omitting it lets an unsupported change silently fall back to COPY and lock the table.
 - Full guide: `~/.claude/stack/mysql.md`.
 
 ## Redis
